@@ -1,5 +1,5 @@
 - 👋 Hi, I'm **Shunyao Yin** (@yinshunyao)
-- 📫 Contact: **yinshunyao@qq.com**
+- 📫 Contact: **wecht: 17302868369**
 
 ## About Me
 

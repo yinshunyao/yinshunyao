@@ -3,16 +3,16 @@
 
 ## About Me
 
-AI product engineer with hands-on experience in **Python full-stack development**, **AI agent platform engineering**, **CV annotation system design**, and **CV inference platform delivery**.  
-I focus on turning complex AI workflows into stable, usable products with clear architecture and efficient delivery.
+AI product engineer with hands-on experience in **Python full-stack development**, **AI agent platform engineering**, **CV annotation system design**, and **end-to-end agricultural CV delivery** (data prep → train → deploy → serve).  
+I focus on turning complex AI workflows into stable, usable products with clear architecture and efficient delivery — especially **config-driven multi-model inference** for real field devices.
 
 ## Core Technical Strengths
 
 - **Python engineering**: Django / FastAPI / Flask / gRPC, API design, service orchestration, and automation tooling
 - **AI application integration**: LLM integration (Qwen), agent execution flow design, tool calling and capability abstraction
 - **Data & annotation systems**: multi-source data ingestion, template-based annotation workflow, 3D annotation scenario support
-- **CV/ML engineering foundation**: PyTorch / TensorFlow / OpenCV / NumPy with product-oriented implementation mindset
-- **CV inference & deployment**: config-driven multi-model pipelines, YOLO detect/segment/cls, TensorRT, Gradio/FastAPI serving
+- **CV/ML engineering**: PyTorch / OpenCV / NumPy; YOLO detect·segment·cls, RT-DETR, ConvNeXt / timm, ArcFace; VOC/YOLO data pipelines and hard-case augmentation
+- **CV inference & deployment**: config-driven multi-root pipelines; **YOLO / ONNX Runtime / TensorRT** backends; per-class confidence & diagonal-size (`dia`) filters; relative-size rerank; Gradio + FastAPI serving
 - **Delivery & maintainability**: modular architecture, environment bootstrap scripts, reproducible local deployment, and operation-friendly design
 
 ## Project Highlights
@@ -40,20 +40,35 @@ I focus on turning complex AI workflows into stable, usable products with clear 
 - Supported **3D point-cloud cuboid annotation** workflows, expanding product capability to advanced spatial scenarios
 ![3D Annotation Workflow](./04%203D%E6%A0%87%E6%B3%A8.png)
 
-### 3) Insect Pest Recognition - Unified CV Inference Platform
+### 3) Insect Pest Recognition - Train-to-Serve CV Platform
 
-End-to-end pest identification system for **field devices, lab evaluation, and production deployment** — from model orchestration to online API delivery.
+End-to-end pest identification for **sticky-trap field devices, lab evaluation, and production APIs** — covering data augmentation, multi-framework training, config-driven inference, and online delivery.  
+Open inference reference: [yinshunyao/script](https://github.com/yinshunyao/script).
 
-- Built a **config-driven unified inference pipeline** (`predict_all`): multi-root detect / segment / nested classification in one runtime, with JSON-only routing for new species and scenario profiles (field / lab / custom)
-- Designed **recursive `out` → `models.cls` routing** so algorithm changes ship without code edits; detect and segment roots run in parallel with unified bbox + polygon output
-- Delivered **production-ready serving** via Gradio test UI + FastAPI REST (`/insect_3_predict`), health checks, model warmup, hot profile switching, and backward-compatible API responses
-- Optimized **GPU throughput** with TensorRT, tiled detect/seg batching, GPU crop pipelines, and optional multi-process worker pools for concurrent HTTP traffic
-- Implemented **field-adaptive logic**: sticky-trap ROI preprocessing, multi-scale sliding windows, in-big small-insect recovery, and JSON-tunable size/morphology filters for on-site tuning
-- Closed the **quality loop** with built-in Pascal VOC validation (TP/FP/FN metrics), explainable filter reasons, incremental batch resume, and Label Studio hard-case export
+![Insect Pest Recognition](./害虫识别项目.png)
+
+**Training & data**
+
+- Built a field-oriented train suite: detect-for-localize → classify-for-species (avoids near-species collisions on one detect head)
+- Covered rare / stacked / occluded insects via transparent-bug augmentation, background paste, and per-class sampling quotas
+- Unified VOC/YOLO multi-source merge; YOLO / RetinaNet / RT-DETR detection and YOLO-cls / ConvNeXt / DINOv3 / ArcFace classification entries
+
+**Inference & filtering (JSON-configurable)**
+
+- **Multi-backend detect**: Ultralytics YOLO (`.pt`), TensorRT (`.engine`), ONNX Runtime (`.onnx`) on the same `PredictSize` pipeline; YOLO segment + nested YOLO-cls / timm ConvNeXt
+- **Config-driven routing**: recursive `out` → `models.cls` decision tree (class / regex / diagonal-size interval keys); lab / field / custom profiles via `run_model` without code changes
+- **Confidence & size gates**: root + per-class `detect_conf` / `cls_conf`, large/small body-size floors, pixel or mm diagonal (`dia` / `dia_mm`), and **same-image relative-size rerank** when top-1 scale mismatches peers
+- **Geometry & morphology**: same-class IoU merge, big/small IoR nesting filters, `mask_rate`, dark-ratio, sticky-trap ROI, multi-scale sliding windows, in-big small-insect recovery
+- **Explainable rejects**: `filter_reason` on dropped instances (threshold / cls / dia / relative_size / geometry / …)
+
+**Serving & quality loop**
+
+- Gradio test UI + FastAPI REST (`/insect_3_predict`), health checks, warmup, hot profile switching, TensorRT / batch / multi-process pools for GPU throughput
+- Built-in Pascal VOC validation, incremental batch resume, Label Studio hard-case export, and offline det/cls threshold grid search
 
 ## Collaboration Focus
 
-- Open to collaborations on **AI products**, **Web backend systems**, **CV data/annotation platforms**, and **CV inference / MLOps delivery**
+- Open to collaborations on **AI products**, **Web backend systems**, **CV data/annotation platforms**, **agricultural / insect CV**, and **CV inference / MLOps delivery**
 - Strong preference for projects that require both **engineering depth** and **product delivery speed**
 
 <!---

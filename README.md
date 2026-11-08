@@ -3,13 +3,14 @@
 
 ## About Me
 
-AI product engineer with hands-on experience in **Python full-stack development**, **AI agent platform engineering**, **CV annotation system design**, and **end-to-end industrial / agricultural CV delivery** (data prep → train → deploy → serve).  
-I focus on turning complex AI workflows into stable, usable products with clear architecture and efficient delivery — especially **config-driven multi-model inference** for field devices and production lines.
+AI product engineer with hands-on experience in **local AI agent / operation-avatar systems**, **Python full-stack development**, **CV annotation system design**, and **end-to-end industrial / agricultural CV delivery** (data prep → train → deploy → serve).  
+I focus on turning complex AI workflows into stable, usable products with clear architecture and efficient delivery — from **observe → plan → act loops on your own machine** to **config-driven multi-model inference** for field devices and production lines.
 
 ## Core Technical Strengths
 
+- **Local agent platforms**: LLM planning with tool calling, capability registries, hard safety gates (path / lease / anti–fake-success), checkpoints, plan graphs, and PWA session shells
 - **Python engineering**: Django / FastAPI / Flask / gRPC, API design, service orchestration, and automation tooling
-- **AI application integration**: LLM integration (Qwen), agent execution flow design, tool calling and capability abstraction
+- **AI application integration**: LLM integration (Qwen / OpenAI-compatible), agent execution flow design, mid-run reflect & post-hoc task review
 - **Data & annotation systems**: multi-source data ingestion, template-based annotation workflow, 3D annotation scenario support
 - **CV/ML engineering**: PyTorch / OpenCV / NumPy; YOLO detect·segment·cls, RT-DETR / RF-DETR, ConvNeXt / timm, ArcFace; VOC/YOLO/COCO data pipelines and hard-case augmentation
 - **CV inference & deployment**: config-driven multi-root pipelines; **YOLO / ONNX Runtime / TensorRT** backends; per-class confidence & diagonal-size (`dia`) filters; relative-size rerank; Gradio + FastAPI / HTTP serving; encrypted customer-side train packages
@@ -17,7 +18,33 @@ I focus on turning complex AI workflows into stable, usable products with clear 
 
 ## Project Highlights
 
-### 1) Insect Pest Recognition — Train-to-Serve CV Platform
+### 1) fawai-avatar — Local Operation Avatar (PC / Phone)
+
+Not a chat-only bot. **fawai-avatar** is a long-running assistant on your machine: understand the goal → observe the environment → plan the next step → run tools / files / shell (and desktop input when available) → verify again. You talk from a LAN PWA (or optional tunnel); the work stays **local**.
+
+Open project: **[yinshunyao/fawai-avatar](https://github.com/yinshunyao/fawai-avatar)**
+
+![fawai-avatar session list](./fawai-avatar-session.png)
+
+![fawai-avatar in-chat step stream](./fawai-avatar-steps.png)
+
+![fawai-avatar plan graph](./fawai-avatar-plan.png)
+
+**What it does today**
+
+- **Brain / Control / Observe**: planner never touches devices; control hard-runs tools with path & foreground-lease gates; observe feeds screen / AX / filesystem / tool digests back into planning
+- **Cross-device session**: local HTTP/WS gateway + phone/desktop PWA; in-chat step stream, live thinking, resume-from-step, voice ASR, zh/en UI
+- **Coding & files (background)**: precise patch, multi-file writes, code index / grep, Git, session Diff, version snapshots, Python session tools (`py_write` / `py_pip` / `py_run`)
+- **Complex-task plan mode**: orchestrator emits a digraph → supervisor nodes → executor steps; failed-node retry keeps completed work; explicit full replan only
+- **Memory & self-evolution**: personal lore (FTS), Skill library, script “shovels”; task review → checklist → backup then patch Skill / lesson / code / rules
+- **Platforms**: macOS desktop (coding + optional GUI); Linux headless (gateway + coding/files/shell); optional Playwright browser tools
+
+**Boundary (honest)**  
+Phone PWA is a **session client**, not on-device phone control. Arbitrary-App / Electron GUI grounding is still deepening; background coding and file loops are the strongest path today.
+
+**Internal eval (v0.1.3)** — weighted score **79.5 / B** (see repo `doc/版本/`)
+
+### 2) Insect Pest Recognition — Train-to-Serve CV Platform
 
 End-to-end pest identification for **sticky-trap field devices, lab evaluation, and production APIs** — covering data augmentation, multi-framework training, config-driven inference, and online delivery.
 
@@ -54,7 +81,7 @@ Open inference reference: **[yinshunyao/script](https://github.com/yinshunyao/sc
 | Field | Score ID≥3 only | **78.09%** |
 | Field | Instance accuracy | 91.48% (1385 / 23 / 63) |
 
-### 2) Scanly — Furniture Edge-Banding Defect Detection
+### 3) Scanly — Furniture Edge-Banding Defect Detection
 
 Line-scan / panel CV for **furniture edge-banding defects** on production boards: locate → classify → board-level NG / label / discharge decisions across three cameras (top / side / bottom).
 
@@ -76,7 +103,7 @@ Open project: **[yinshunyao/scanly](https://github.com/yinshunyao/scanly)**
 | Images with ≥1 hit (has GT) | **212 / 234** |
 | Online latency (CUDA ORT, warmed) | ≈ **33–38 ms**/image |
 
-### 3) AI Annotation Product — Data Access & Annotation Efficiency
+### 4) AI Annotation Product — Data Access & Annotation Efficiency
 
 - Delivered **multi-source data access** in one entry point (local upload, HTTP incremental pull, MinIO/SFTP/FTP, etc.)
 ![Multi-source Data Access](./01%20%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%E6%96%B9%E5%BC%8F.png)
@@ -90,7 +117,7 @@ Open project: **[yinshunyao/scanly](https://github.com/yinshunyao/scanly)**
 - Supported **3D point-cloud cuboid annotation** workflows, expanding product capability to advanced spatial scenarios
 ![3D Annotation Workflow](./04%203D%E6%A0%87%E6%B3%A8.png)
 
-### 4) hipp-or — Intelligent Requirements Analysis Product
+### 5) hipp-or — Intelligent Requirements Analysis Product
 
 Product **hipp-or** (“clarify the requirement before talking implementation”): multi-client LLM requirements consulting with wallet billing, built on [kinit](https://github.com/vvandk/kinit) and wired to **Dify** (keys stay server-side) plus shared identity/wallet via **hipp-manager** (product code `or`).
 
@@ -109,6 +136,7 @@ Open project: **[yinshunyao/hipp-or](https://github.com/yinshunyao/hipp-or)** ·
 
 | Repo | Description |
 |:---|:---|
+| [yinshunyao/fawai-avatar](https://github.com/yinshunyao/fawai-avatar) | Local PC/phone operation avatar (observe → plan → act; PWA session) |
 | [yinshunyao/script](https://github.com/yinshunyao/script) | Insect pest config-driven multi-root inference (Gradio + REST) |
 | [yinshunyao/scanly](https://github.com/yinshunyao/scanly) | Furniture edge-banding defect train / eval / edge serve |
 | [yinshunyao/hipp-or](https://github.com/yinshunyao/hipp-or) | Intelligent requirements analysis (Web / admin / mini program) |
@@ -116,7 +144,7 @@ Open project: **[yinshunyao/hipp-or](https://github.com/yinshunyao/hipp-or)** ·
 
 ## Collaboration Focus
 
-- Open to collaborations on **AI products**, **LLM conversational apps**, **Web backend systems**, **CV data/annotation platforms**, **agricultural / industrial CV**, and **CV inference / MLOps delivery**
+- Open to collaborations on **local AI agents / operation avatars**, **AI products**, **LLM conversational apps**, **Web backend systems**, **CV data/annotation platforms**, **agricultural / industrial CV**, and **CV inference / MLOps delivery**
 - Strong preference for projects that require both **engineering depth** and **product delivery speed**
 
 <!---
